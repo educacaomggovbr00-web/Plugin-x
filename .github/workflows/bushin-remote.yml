@@ -1,0 +1,28 @@
+name: '🍥 Bushin — endpoint remoto seguro'
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Testar isolamento e autenticação
+        run: node --test tests/cloudflare-worker.test.mjs
+      - name: Verificar endpoint remoto (health)
+        run: |
+          curl --fail --silent --show-error --max-time 20 'https://bushin-agent-lab.henrique-silva081106.workers.dev/health' -o health.json
+          node --input-type=module -e "import fs from 'node:fs'; const j=JSON.parse(fs.readFileSync('health.json')); if(j.service!=='bushin-agent-lab') process.exit(1); console.log(j.status);"
+      - name: Confirmar que ação sem token recebe HTTP 401
+        run: |
+          CODE=$(curl -sS -o /tmp/bushin_result -w "%{http_code}" --max-time 20 \
+            -X POST -H 'Content-Type: application/json' \
+            --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"bushin_cloud_browser_read","arguments":{"url":"https://example.com"}}}' \
+            'https://bushin-agent-lab.henrique-silva081106.workers.dev/mcp')
+          test "$CODE" = "401"

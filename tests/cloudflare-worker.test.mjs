@@ -1,0 +1,12 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import worker,{TOOLS,safeUrl} from '../cloudflare/bushin-agent-worker.mjs';
+
+const req=(path='/mcp',obj={jsonrpc:'2.0',id:1,method:'tools/list'},token='')=>new Request('https://bushin-agent-lab.example.test'+path,{method:'POST',headers:{'content-type':'application/json',...(token?{authorization:'Bearer '+token}:{})},body:JSON.stringify(obj)});
+const env={AGENT_API_KEY:'a'.repeat(56),BROWSER:{quickAction:async(name)=>new Response(name==='markdown'?'Example rendered text':'image mock',{headers:{'content-type':name==='markdown'?'text/plain':'image/png'}})}};
+test('manifest advertises exactly three read-only commands',async()=>{const r=await worker.fetch(req(),env);const x=await r.json();assert.equal(x.result.tools.length,3);assert.equal(TOOLS.length,3);assert.ok(x.result.tools.every(x=>x.annotations.readOnlyHint));});
+test('health does not leak authentication key',async()=>{const r=await worker.fetch(new Request('https://bushin-agent-lab.example.test/health'),env);const t=await r.text();assert.equal(r.status,200);assert.equal(t.includes(env.AGENT_API_KEY),false);});
+test('browser tools reject missing or incorrect token',async()=>{for(const token of ['','x'.repeat(56)]){const r=await worker.fetch(req('/mcp',{jsonrpc:'2.0',id:1,method:'tools/call',params:{name:'bushin_cloud_browser_read',arguments:{url:'https://example.com'}}},token),env);assert.equal(r.status,401);}});
+test('only allowlisted public HTTPS URLs allowed',()=>{for(const u of ['http://example.com/','https://localhost','https://169.254.169.254','https://evil.com','https://user:password@example.com','https://example.com:4040'])assert.throws(()=>safeUrl(u));assert.equal(safeUrl('https://example.com/'),'https://example.com/');});
+test('authorized owner can read a test public page',async()=>{const r=await worker.fetch(req('/mcp',{jsonrpc:'2.0',id:4,method:'tools/call',params:{name:'bushin_cloud_browser_read',arguments:{url:'https://example.com/'}}},env.AGENT_API_KEY),env);const x=await r.json();assert.equal(r.status,200);assert.match(x.result.content[0].text,/Example rendered text/);});
+test('authorized screenshot produces MCP image',async()=>{const r=await worker.fetch(req('/mcp',{jsonrpc:'2.0',id:5,method:'tools/call',params:{name:'bushin_cloud_browser_screenshot',arguments:{url:'https://example.com/'}}},env.AGENT_API_KEY),env);const x=await r.json();assert.equal(x.result.content[0].mimeType,'image/png');});

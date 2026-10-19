@@ -1,0 +1,12 @@
+{
+  "name": "bushin-agent-lab",
+  "main": "bushin-agent-worker.mjs",
+  "compatibility_date": "2026-10-19",
+  "workers_dev": true,
+  "browser": {
+    "binding": "BROWSER"
+  },
+  "observability": {
+    "enabled": false
+  }
+}
