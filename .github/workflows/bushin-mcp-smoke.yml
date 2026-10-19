@@ -1,0 +1,16 @@
+name: '🍥 Bushin — smoke MCP remoto (somente leitura)'
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar metadados OAuth e ferramentas MCP (sem login)
+        run: node tests/mcp_smoke.mjs
