@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bushin Browser — Discord no Android"
+  short_description: "Conectar Discord pelo navegador Android; não exige Linux"
+  default_prompt: "Bushin, me ajude a conectar o Discord pelo portal seguro no Android, sem desktop nem Linux."
