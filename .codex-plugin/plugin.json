@@ -1,4 +1,17 @@
 {
+  "interface": {
+    "displayName": "Bushin Browser",
+    "developerName": "Bushin Browser",
+    "category": "Productivity",
+    "shortDescription": "Bushin 2.15 — OAuth + MCP remoto",
+    "longDescription": "Bushin Browser original: OAuth Discord para identidade, lista de servidores e status de conexão. Servidor MCP remoto https://bushin-discord-direct.henrique-silva081106.workers.dev/mcp já implementa bushin_discord_whoami, bushin_discord_list_servers e bushin_session_status, sem bot nem Linux. Testes de integração e de produção verificaram catálogo MCP e proteção OAuth. Importante: o plugin no Android continua skill-only até haver um App registrado e instalado com ferramentas executáveis. Não declarar acesso pessoal ao Discord sem conexão MCP OAuth do ChatGPT. O login OAuth móvel existente confirma identidade mas não concede leitura/envio de mensagens como usuário. Não adicionar MCP local/desktop-only, não solicitar senhas ou tokens, não abrir Linux como etapa obrigatória.",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Bushin, confira se meu Discord está realmente conectado ao ChatGPT e consulte minha identidade por OAuth, sem Linux.",
+      "Bushin, use a API oficial para listar meus servidores, somente se houver ferramenta executável conectada.",
+      "Bushin, verifique o status real da integração, distinguindo login do portal e MCP no ChatGPT Android."
+    ]
+  },
   "name": "bushin-browser",
   "version": "2.15.0",
   "description": "Bushin Browser 2.15: identidade e servidores Discord via OAuth + MCP remoto prontos, sem Linux para consultas; conexão App nativa ainda pendente.",
@@ -9,21 +22,36 @@
     "bushin",
     "browser",
     "discord",
+    "naruto",
     "android",
-    "oauth",
-    "mcp",
-    "skill-only"
+    "mobile",
+    "discord-oauth",
+    "pkce",
+    "cloudflare-workers",
+    "cloudflare-d1",
+    "mobile-login",
+    "shinobi",
+    "rpg",
+    "safe-authorization",
+    "skill-only",
+    "browser-tabs",
+    "mcp-toolkit",
+    "naruto-rp-agent",
+    "audit-log",
+    "task-manager",
+    "files-github",
+    "advanced-tools",
+    "discord-bot-dm",
+    "owner-only-test",
+    "dm-test",
+    "android-dashboard",
+    "github-oidc",
+    "visual-browser",
+    "mobile-controls",
+    "chat-cloudflare-bridge",
+    "oauth-native-readiness",
+    "remote-mcp-read-only",
+    "discord-connected-identity"
   ],
-  "skills": "./skills",
-  "interface": {
-    "displayName": "Bushin Browser",
-    "developerName": "Bushin Browser",
-    "category": "Productivity",
-    "shortDescription": "Bushin 2.15 — OAuth + MCP remoto",
-    "longDescription": "Bushin Browser original: OAuth Discord para identidade, lista de servidores e status de conexão. Servidor MCP remoto já implementa bushin_discord_whoami, bushin_discord_list_servers e bushin_session_status. Este é um pacote skill-only, sem ferramentas App/MCP executáveis registradas no ChatGPT Android. Não solicitar senhas, tokens ou Linux.",
-    "capabilities": [],
-    "defaultPrompt": [
-      "Bushin, confira se meu Discord está realmente conectado ao ChatGPT e consulte minha identidade por OAuth, sem Linux."
-    ]
-  }
+  "skills": "./skills"
 }
