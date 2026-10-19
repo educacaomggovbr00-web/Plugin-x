@@ -1,0 +1,24 @@
+name: '🍥 Bushin — MCP agent e navegador real'
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  agent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar dependências
+        run: npm install --no-audit --no-fund
+      - name: Testar MCP local
+        run: npm test
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Testar navegação e screenshot reais
+        run: npm run test:browser
