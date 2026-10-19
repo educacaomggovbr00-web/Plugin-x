@@ -41,6 +41,6 @@ jobs:
       - name: Smoke OAuth do Discord (somente leitura, sem login)
         run: node tests/mcp_smoke.mjs
       - name: Instalar Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
       - name: Testar navegação real, leitura e screenshot
         run: npm run test:browser
