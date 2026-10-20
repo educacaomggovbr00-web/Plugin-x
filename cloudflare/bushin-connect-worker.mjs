@@ -84,7 +84,13 @@ async function checkServices(fetcher = fetch) {
   };
 }
 
-async function handle(request,fetcher = fetch) {
+async function handle(request,envOrFetcher = fetch) {
+  const fetcher = typeof envOrFetcher === 'function' ? envOrFetcher : (url,options) => {
+    // No same-zone workers.dev recursion; use Cloudflare service bindings.
+    const target = url.startsWith(DISCORD + '/') ? envOrFetcher.DISCORD_WORKER : envOrFetcher.AGENT_WORKER;
+    if(!target?.fetch)throw Error('Service binding indisponível');
+    return target.fetch(url,options);
+  };
   const url=new URL(request.url);
   if(request.method!=='GET' && request.method!=='HEAD')return json({error:'method_not_allowed'},405);
   if(url.pathname==='/' || url.pathname==='/connect')return new Response(request.method==='HEAD'?null:PAGE,{headers:{...BASE_HEADERS,'content-type':'text/html; charset=utf-8'}});
