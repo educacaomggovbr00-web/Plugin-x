@@ -65,3 +65,17 @@ test('write methods are blocked and unknown paths return 404',async()=>{
   assert.equal((await worker.fetch(new Request(url+'/api/status',{method:'POST'}))).status,405);
   assert.equal((await worker.fetch(new Request(url+'/unknown'))).status,404);
 });
+
+test('production accesses sibling Workers through service bindings',async()=>{
+  let discord=0,agent=0;
+  const env={
+    DISCORD_WORKER:{fetch:async(url,opts)=>{discord++;return mockedFetch(url,opts);}},
+    AGENT_WORKER:{fetch:async(url,opts)=>{agent++;return mockedFetch(url,opts);}}
+  };
+  const r=await worker.fetch(new Request(url+'/api/status'),env);
+  const d=await r.json();
+  assert.equal(d.discord_mcp.ok,true);
+  assert.equal(d.browser_lab.ok,true);
+  assert.equal(discord,1);
+  assert.equal(agent,1);
+});
