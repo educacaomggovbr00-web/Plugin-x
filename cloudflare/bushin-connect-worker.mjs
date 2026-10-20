@@ -57,7 +57,7 @@ const client = [
 ].join('\n');
 
 async function checkServices(fetcher = fetch) {
-  const request = (url,init = {}) => fetcher(url, {redirect:'error',signal:AbortSignal.timeout(6500),...init});
+  const request = (url,init = {}) => fetcher(url, {redirect:'manual',signal:AbortSignal.timeout(6500),...init});
   const [discord,browser] = await Promise.allSettled([
     (async () => {
       const r = await request(MCP, {method:'POST',headers:{'content-type':'application/json','accept':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method:'tools/list',params:{}})});
@@ -74,7 +74,7 @@ async function checkServices(fetcher = fetch) {
       return d.status==='online'?{ok:true,service:d.service}:{ok:false,reason:'status inesperado'};
     })()
   ]);
-  const fallback = v => v.status==='fulfilled'?v.value:{ok:false,reason:String(v.reason?.message||v.reason||'indisponível').slice(0,100)};
+  const fallback = v => v.status==='fulfilled'?v.value:{ok:false,reason:'serviço indisponível ou erro de rede'};
   return {
     discord_mcp:fallback(discord),
     browser_lab:fallback(browser),
