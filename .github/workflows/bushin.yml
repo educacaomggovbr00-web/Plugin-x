@@ -34,6 +34,10 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Testes locais MCP e segurança do Worker
         run: node --test tests/agent.test.mjs tests/cloudflare-worker.test.mjs
+      - name: Testar portal móvel de conexão separado
+        run: |
+          node --check cloudflare/bushin-connect-worker.mjs
+          node --test tests/connect-hub.test.mjs
       - name: Validar JavaScript dos diagnósticos
         run: |
           node --check scripts/check-connection.mjs
