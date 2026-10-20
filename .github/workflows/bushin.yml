@@ -1,4 +1,4 @@
-name: '🍥 Bushin — CI único'
+name: '🍥 Bushin — Conexão e Testes'
 
 on:
   push:
@@ -44,6 +44,26 @@ jobs:
         run: node tests/mcp_smoke.mjs
       - name: Preparar conexão Bushin MCP para o ChatGPT
         run: node scripts/chatgpt-handoff.mjs
+      - name: Publicar central de conexão no resumo do workflow
+        if: always()
+        run: |
+          cat <<'BUSHIN_HUB' >> "$GITHUB_STEP_SUMMARY"
+          ## 🍥 Acesso pelo celular — Plugin-x
+
+          **[📱 Abrir a central de conexão do Bushin](https://github.com/educacaomggovbr00-web/Plugin-x/blob/main/docs/CONNECT-HUB.md)**
+
+          | Serviço | Link seguro | Situação |
+          |---|---|---|
+          | Discord | [Autorizar pelo portal do Bushin](https://bushin-discord-direct.henrique-silva081106.workers.dev/mobile) | Login OAuth separado |
+          | ChatGPT | [Abrir ChatGPT](https://chatgpt.com/) | Conexão do App/MCP exige autorização no ChatGPT |
+          | Testes | [Histórico de execuções](https://github.com/educacaomggovbr00-web/Plugin-x/actions/workflows/bushin.yml) | Verifique o resultado desta execução |
+
+          **URL MCP para cadastrar no ChatGPT (onde disponível):**
+          `https://bushin-discord-direct.henrique-silva081106.workers.dev/mcp`
+
+          **Importante:** este workflow verifica serviços públicos e executa testes isolados. Não faz login por você, não instala o App, não lê/envia mensagens pessoais e não comprova execução no Android.
+
+          BUSHIN_HUB
       - name: Publicar dados de conexão sem credenciais
         uses: actions/upload-artifact@v4
         with:
