@@ -4,6 +4,20 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      ai_mode:
+        description: 'Tarefa com IA: dry_run (sem custo) ou api (OpenAI API paga separadamente)'
+        type: choice
+        required: true
+        default: dry_run
+        options:
+          - dry_run
+          - api
+      ai_task:
+        description: 'Pedido para a IA analisar, sem senhas nem tokens (maximo 1200 caracteres)'
+        type: string
+        required: false
+        default: 'Sugira um teste seguro do Bushin sem alterar o Discord.'
 
 permissions:
   contents: read
@@ -38,6 +52,10 @@ jobs:
         run: |
           node --check cloudflare/bushin-connect-worker.mjs
           node --test tests/connect-hub.test.mjs
+      - name: Testar executor de IA (sem custos)
+        run: |
+          node --check scripts/ai-workflow.mjs
+          node --test tests/ai-workflow.test.mjs
       - name: Validar JavaScript dos diagnósticos
         run: |
           node --check scripts/check-connection.mjs
@@ -83,3 +101,40 @@ jobs:
         run: npx playwright install chromium
       - name: Testar navegação real, leitura e screenshot
         run: npm run test:browser
+
+  ai-task:
+    name: Tarefa com IA — acionamento manual
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    needs: bushin
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    permissions:
+      contents: read
+    steps:
+      - name: Baixar laboratorio
+        uses: actions/checkout@v4
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Simular tarefa de IA sem custo (padrao)
+        if: inputs.ai_mode == 'dry_run'
+        run: node scripts/ai-workflow.mjs
+        env:
+          BUSHIN_AI_MODE: dry_run
+          BUSHIN_AI_TASK: ${{ inputs.ai_task }}
+      - name: Executar IA pela OpenAI API (somente apos escolha manual)
+        if: inputs.ai_mode == 'api'
+        run: node scripts/ai-workflow.mjs
+        env:
+          BUSHIN_AI_MODE: api
+          BUSHIN_AI_TASK: ${{ inputs.ai_task }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Guardar relatorio (sem credenciais)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bushin-ai-task-report
+          path: bushin-output/ai-workflow-result.md
+          if-no-files-found: warn
+          retention-days: 7
