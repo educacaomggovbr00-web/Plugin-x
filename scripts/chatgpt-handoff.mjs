@@ -6,7 +6,7 @@ import {mkdir, writeFile, appendFile} from 'node:fs/promises';
 const server = 'https://bushin-discord-direct.henrique-silva081106.workers.dev';
 const endpoint = server + '/mcp';
 const expectedTools = ['bushin_discord_whoami', 'bushin_discord_list_servers', 'bushin_session_status'];
-const output = '.bushin-out';
+const output = 'bushin-output';
 
 async function getJSON(url, options = {}) {
   assert.ok(url.startsWith(server + '/'), 'URL must stay within the fixed Bushin server');

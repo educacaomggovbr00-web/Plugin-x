@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bushin-chatgpt-connection
-          path: .bushin-out/
+          path: bushin-output/
           if-no-files-found: error
           retention-days: 7
       - name: Instalar Chromium
