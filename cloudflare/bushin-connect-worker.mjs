@@ -74,7 +74,7 @@ async function checkServices(fetcher = fetch) {
       return d.status==='online'?{ok:true,service:d.service}:{ok:false,reason:'status inesperado'};
     })()
   ]);
-  const fallback = v => v.status==='fulfilled'?v.value:{ok:false,reason:'servidor indisponível'};
+  const fallback = v => v.status==='fulfilled'?v.value:{ok:false,reason:String(v.reason?.message||v.reason||'indisponível').slice(0,100)};
   return {
     discord_mcp:fallback(discord),
     browser_lab:fallback(browser),
