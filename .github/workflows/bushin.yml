@@ -34,12 +34,23 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Testes locais MCP e segurança do Worker
         run: node --test tests/agent.test.mjs tests/cloudflare-worker.test.mjs
-      - name: Validar JavaScript do diagnóstico
-        run: node --check scripts/check-connection.mjs
+      - name: Validar JavaScript dos diagnósticos
+        run: |
+          node --check scripts/check-connection.mjs
+          node --check scripts/chatgpt-handoff.mjs
       - name: Diagnóstico do MCP público (sem credenciais)
         run: node scripts/check-connection.mjs
       - name: Smoke OAuth do Discord (somente leitura, sem login)
         run: node tests/mcp_smoke.mjs
+      - name: Preparar conexão Bushin MCP para o ChatGPT
+        run: node scripts/chatgpt-handoff.mjs
+      - name: Publicar dados de conexão sem credenciais
+        uses: actions/upload-artifact@v4
+        with:
+          name: bushin-chatgpt-connection
+          path: .bushin-out/
+          if-no-files-found: error
+          retention-days: 7
       - name: Instalar Chromium
         run: npx playwright install chromium
       - name: Testar navegação real, leitura e screenshot
