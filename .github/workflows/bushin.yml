@@ -46,6 +46,10 @@ jobs:
         run: node scripts/check-connection.mjs
       - name: Smoke OAuth do Discord (somente leitura, sem login)
         run: node tests/mcp_smoke.mjs
+      - name: Testar link público da central móvel (Cloudflare)
+        run: |
+          node --check scripts/check-hub-live.mjs
+          node scripts/check-hub-live.mjs
       - name: Preparar conexão Bushin MCP para o ChatGPT
         run: node scripts/chatgpt-handoff.mjs
       - name: Publicar central de conexão no resumo do workflow
@@ -54,7 +58,7 @@ jobs:
           cat <<'BUSHIN_HUB' >> "$GITHUB_STEP_SUMMARY"
           ## 🍥 Acesso pelo celular — Plugin-x
 
-          **[📱 Abrir a central de conexão do Bushin](https://github.com/educacaomggovbr00-web/Plugin-x/blob/main/docs/CONNECT-HUB.md)**
+          **[📱 ABRIR O BUSHIN — CONECTAR E TESTAR](https://bushin-connect-lab.henrique-silva081106.workers.dev/)**
 
           | Serviço | Link seguro | Situação |
           |---|---|---|
