@@ -2,6 +2,14 @@
 
 Este repositório privado contém uma cópia dos arquivos do Bushin Browser 2.15.0 para desenvolver, testar e corrigir bugs **antes** de publicar qualquer atualização. Não instala nem recupera automaticamente um plugin no ChatGPT.
 
+## 🤖 Tarefa de IA no workflow (primeiro sentido)
+
+**[Abrir GitHub Actions — Bushin](https://github.com/educacaomggovbr00-web/Plugin-x/actions/workflows/bushin.yml)**
+
+O **mesmo workflow** aceita uma tarefa textual por `Run workflow`. O modo padrão `dry_run` testa o mecanismo sem usar modelo, credenciais ou cobrança. O modo `api` exige sua configuração manual de `OPENAI_API_KEY` e é **cobrado separadamente do ChatGPT**; não é login da sua conta ChatGPT.
+
+**[Instruções seguras e limites técnicos](docs/AI-WORKFLOW.md)**. Nada foi cobrado ou conectado automaticamente.
+
 ## 📱 Central móvel de conexão
 
 **[Abrir portal Bushin — Conectar e Testar](https://bushin-connect-lab.henrique-silva081106.workers.dev/)**
