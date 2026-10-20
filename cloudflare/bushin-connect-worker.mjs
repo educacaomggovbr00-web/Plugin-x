@@ -12,7 +12,7 @@ const BASE_HEADERS = {
   'content-security-policy': "default-src 'none'; connect-src 'self'; script-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 };
 const json = (body, status = 200) => new Response(JSON.stringify(body), {status, headers: {...BASE_HEADERS, 'content-type':'application/json; charset=utf-8'}});
-const html = new Response([
+const PAGE = [
   '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">',
   '<meta name="viewport" content="width=device-width,initial-scale=1">',
   '<title>🍥 Bushin — Conectar e testar</title>',
@@ -47,7 +47,7 @@ const html = new Response([
   '<a class="button secondary" href="https://github.com/educacaomggovbr00-web/Plugin-x/actions/workflows/bushin.yml" rel="noreferrer">Abrir workflow Plugin-x</a>',
   '<p><small>Actions testa o código. Você não precisa fazer login num Linux.</small></p></section>',
   '<script src="/app.js" defer></script></main></body></html>'
-].join('\n'), {headers: {...BASE_HEADERS, 'content-type':'text/html; charset=utf-8'}});
+].join('\n');
 
 const client = [
   "'use strict';",
@@ -87,7 +87,7 @@ async function checkServices(fetcher = fetch) {
 async function handle(request,fetcher = fetch) {
   const url=new URL(request.url);
   if(request.method!=='GET' && request.method!=='HEAD')return json({error:'method_not_allowed'},405);
-  if(url.pathname==='/' || url.pathname==='/connect')return request.method==='HEAD'?new Response(null,{headers:html.headers}):html.clone();
+  if(url.pathname==='/' || url.pathname==='/connect')return new Response(request.method==='HEAD'?null:PAGE,{headers:{...BASE_HEADERS,'content-type':'text/html; charset=utf-8'}});
   if(url.pathname==='/app.js')return new Response(request.method==='HEAD'?null:client,{headers:{...BASE_HEADERS,'content-type':'application/javascript; charset=utf-8'}});
   if(url.pathname==='/health')return json({service:'bushin-connect-hub',status:'online',auth:'external_oauth_only'});
   if(url.pathname==='/api/status')return json(await checkServices(fetcher));
