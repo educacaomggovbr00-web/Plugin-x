@@ -2,6 +2,14 @@
 
 Este repositório privado contém uma cópia dos arquivos do Bushin Browser 2.15.0 para desenvolver, testar e corrigir bugs **antes** de publicar qualquer atualização. Não instala nem recupera automaticamente um plugin no ChatGPT.
 
+## 📱 Central móvel de conexão
+
+**[Abrir portal Bushin — Conectar e Testar](https://bushin-connect-lab.henrique-silva081106.workers.dev/)**
+
+Worker isolado `bushin-connect-lab`: encaminha a autorização do Discord para o portal OAuth original, apresenta a URL MCP para cadastro no ChatGPT onde disponível e verifica o estado **público** dos servidores por Service Bindings. Não instala o App nem acessa mensagens pessoais.
+
+O CI executa `node scripts/check-hub-live.mjs` para testar o site publicado, além dos testes locais.
+
 ## Conteúdo
 
 - `plugin.json` e `.codex-plugin/plugin.json`: manifestos de laboratório.
