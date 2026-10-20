@@ -1,0 +1,19 @@
+{
+  "name": "bushin-connect-lab",
+  "main": "bushin-connect-worker.mjs",
+  "compatibility_date": "2026-10-19",
+  "workers_dev": true,
+  "observability": {
+    "enabled": false
+  },
+  "services": [
+    {
+      "binding": "DISCORD_WORKER",
+      "service": "bushin-discord-direct"
+    },
+    {
+      "binding": "AGENT_WORKER",
+      "service": "bushin-agent-lab"
+    }
+  ]
+}

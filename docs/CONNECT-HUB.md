@@ -1,6 +1,12 @@
 # 🍥 Bushin — Conexão e Testes (Plugin-x)
 
-**Esta é a central de links para usar pelo celular.** As duas autorizações são separadas: GitHub Actions **não** consegue instalar um App na sua conta ChatGPT nem fazer login em seu Discord.
+## 📱 Portal móvel publicado e testado
+
+**[ABRIR O BUSHIN — CONECTAR E TESTAR](https://bushin-connect-lab.henrique-silva081106.workers.dev/)**
+
+Esta página HTTPS roda no Cloudflare Worker independente `bushin-connect-lab`. Mostra os links para autorização OAuth Discord, abre ChatGPT e oferece um botão **Testar servidores agora**, que consulta em tempo real dois serviços próprios (Discord MCP e navegador) usando Service Bindings, sem credenciais.
+
+**Esse diagnóstico só verifica disponibilidade pública.** Não confirma que seu usuário Discord está autorizado no ChatGPT e não lê nem envia mensagens pessoais.
 
 ## 1. Discord: login autorizado
 
