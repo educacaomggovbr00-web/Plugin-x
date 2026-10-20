@@ -5,5 +5,15 @@
   "workers_dev": true,
   "observability": {
     "enabled": false
-  }
+  },
+  "services": [
+    {
+      "binding": "DISCORD_WORKER",
+      "service": "bushin-discord-direct"
+    },
+    {
+      "binding": "AGENT_WORKER",
+      "service": "bushin-agent-lab"
+    }
+  ]
 }
